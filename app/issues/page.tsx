@@ -1,11 +1,13 @@
 import React from "react";
 import { Button } from "@radix-ui/themes";
+import Link from "next/link";
 
 const IssuePage: React.FC = () => {
   return (
     <div>
-      <Button title="button">New Issue</Button>
-      issues
+      <Button>
+        <Link href="/issues/new">New Issue</Link>
+      </Button>
     </div>
   );
 };
