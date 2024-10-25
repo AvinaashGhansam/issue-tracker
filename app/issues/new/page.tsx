@@ -1,7 +1,13 @@
 "use client";
 import React from "react";
-import { Button, TextArea, TextField } from "@radix-ui/themes";
+import { Button, TextField } from "@radix-ui/themes";
 import { AiFillEdit } from "react-icons/ai";
+import dynamic from "next/dynamic";
+import "easymde/dist/easymde.min.css";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 const NewIssuePage: React.FC = () => {
   return (
@@ -11,7 +17,7 @@ const NewIssuePage: React.FC = () => {
           <AiFillEdit height="16" width="16" />
         </TextField.Slot>
       </TextField.Root>
-      <TextArea placeholder="Description" />
+      <SimpleMDE placeholder="Description" />
       <Button>Submit New Issue</Button>
     </div>
   );
