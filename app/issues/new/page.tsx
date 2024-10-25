@@ -2,24 +2,46 @@
 import React from "react";
 import { Button, TextField } from "@radix-ui/themes";
 import { AiFillEdit } from "react-icons/ai";
-import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
+import { Controller, useForm } from "react-hook-form";
+import dynamic from "next/dynamic";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
 
-const NewIssuePage: React.FC = () => {
+interface IIssueForm {
+  title: string;
+  description: string;
+}
+const NewIssuePage: React.FC<IIssueForm> = ({ title, description }) => {
+  const { register, control, handleSubmit } = useForm<IIssueForm>();
+  const router = useRouter();
   return (
-    <div className="max-w-xl space-y-3">
-      <TextField.Root placeholder="Title" size="1">
+    <form
+      className="max-w-xl space-y-3"
+      onSubmit={handleSubmit(async (data) => {
+        await axios.post("http://localhost:8080/api/issues", data);
+        void router.push("/issues");
+      })}
+    >
+      <TextField.Root placeholder="Title" size="1" {...register("title")}>
         <TextField.Slot>
           <AiFillEdit height="16" width="16" />
         </TextField.Slot>
       </TextField.Root>
-      <SimpleMDE placeholder="Description" />
+      <Controller
+        name="description"
+        control={control}
+        render={({ field }) => (
+          <SimpleMDE placeholder="Description" {...field} />
+        )}
+      />
+
       <Button>Submit New Issue</Button>
-    </div>
+    </form>
   );
 };
 
